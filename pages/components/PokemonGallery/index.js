@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Card from "../Card";
+import Spinner from "../Spinner";
 
 export default function index() {
   const [pokemons, setPokemons] = useState([]);
@@ -41,9 +42,7 @@ export default function index() {
           return <Card key={pokemon.id} pokemon={pokemon} />;
         })}
       </div>
-      {loading && (
-        <div className="w-10 h-10 border-b-4 border-l-4 border-t-4 animate-spin border-gray-500 border-solid rounded-full my-20"></div>
-      )}
+      {loading && <Spinner />}
     </div>
   );
 }
