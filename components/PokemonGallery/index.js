@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../Card";
 import Spinner from "../Spinner";
 
@@ -11,28 +11,40 @@ export default function index() {
     return arrayIndex + offsetFetch + 1;
   };
 
-  useEffect(() => {
+  const addScrollEvent = () => {
     document.addEventListener("scroll", () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         setLoading(true);
         setOffsetFetch((offsetFetch) => offsetFetch + 21);
       }
     });
-  }, []);
+  };
 
-  useEffect(() => {
+  const mapPokemons = (pokemonsData) => {
+    return pokemonsData.map((pokemon, index) => {
+      return { id: getRealIndexPokedex(index), name: pokemon.name };
+    });
+  };
+
+  const fetchPokemonsData = () => {
     fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offsetFetch}&limit=21`)
       .then((res) => res.json())
-      .then((data) => {
-        const { results } = data;
-        const newPokemons = results.map((pokemon, index) => {
-          return { id: getRealIndexPokedex(index), name: pokemon.name };
-        });
+      .then((apiResponse) => {
+        const { results: pokemonList } = apiResponse;
+        const newPokemons = mapPokemons(pokemonList);
         const totalPokemon = [...pokemons, ...newPokemons];
         setPokemons([...totalPokemon]);
         setLoading(false);
       })
       .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    addScrollEvent();
+  }, []);
+
+  useEffect(() => {
+    fetchPokemonsData();
   }, [offsetFetch]);
 
   return (
