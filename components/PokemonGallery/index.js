@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Card from "../Card";
 import Spinner from "../Spinner";
 
-export default function index() {
+export default function PokemonGallery() {
   const [pokemons, setPokemons] = useState([]);
   const [offsetFetch, setOffsetFetch] = useState(0);
   const [loading, setLoading] = useState(false);
