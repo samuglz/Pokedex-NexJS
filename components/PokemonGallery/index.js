@@ -7,24 +7,27 @@ export default function PokemonGallery() {
   const [pokemons, setPokemons] = useState([]);
   const [offsetFetch, setOffsetFetch] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const addScrollEvent = () => {
     document.addEventListener("scroll", () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        setLoading(true);
-        setOffsetFetch((offsetFetch) => offsetFetch + 21);
+        setOffsetFetch((offsetFetch) => offsetFetch + 24);
       }
     });
   };
 
   const fetchPokemonsData = async () => {
+    setLoading(true);
     try {
       const newPokemons = await FetchPokemons(offsetFetch);
       const totalPokemon = [...pokemons, ...newPokemons];
       setPokemons([...totalPokemon]);
-      setLoading(false);
     } catch (error) {
       console.error(error);
+      setError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,11 +41,21 @@ export default function PokemonGallery() {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="grid gap-6 grid-flow-row lg:grid-cols-3 md:grid-cols-2">
-        {pokemons.map((pokemon) => {
-          return <Card key={pokemon.id} pokemon={pokemon} />;
-        })}
-      </div>
+      {error ? (
+        <div className="bg-red-300 p-4 font-bold text-red-700 text-xl md:text-3xl rounded shadow-md flex flex-col justify-center items-center">
+          <span>❌</span>
+          <p className="text-center">
+            Oops, something went wrong, try again later.
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-6 grid-flow-row lg:grid-cols-3 md:grid-cols-2">
+          {pokemons.map((pokemon) => {
+            return <Card key={pokemon.id} pokemon={pokemon} />;
+          })}
+        </div>
+      )}
+
       {loading && (
         <div className="my-5">
           <Spinner />
