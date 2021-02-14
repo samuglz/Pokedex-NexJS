@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "components/Card";
 import Spinner from "components/Spinner";
+import Error from "components/Error";
 import { FetchPokemons, NUMBER_POKEMONS_PER_FETCH } from "services/PokemonApi";
 
 export default function PokemonGallery() {
@@ -45,12 +46,7 @@ export default function PokemonGallery() {
   return (
     <div className="flex flex-col justify-center items-center">
       {error ? (
-        <div className="bg-red-300 p-4 font-bold text-red-700 text-xl md:text-3xl rounded shadow-md flex flex-col justify-center items-center">
-          <span>❌</span>
-          <p className="text-center">
-            Oops, something went wrong, try again later.
-          </p>
-        </div>
+        <Error />
       ) : (
         <div className="grid gap-6 grid-flow-row lg:grid-cols-3 md:grid-cols-2">
           {pokemons.map((pokemon) => {
