@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import Card from "components/Card";
 import Spinner from "components/Spinner";
 import Error from "components/Error";
-import { FetchPokemons, NUMBER_POKEMONS_PER_FETCH } from "services/PokemonApi";
+import { FetchPokemons } from "services/PokemonApi";
+
+const NUMBER_POKEMONS_PER_FETCH = 24;
 
 export default function PokemonGallery() {
   const [pokemons, setPokemons] = useState([]);
@@ -23,7 +25,10 @@ export default function PokemonGallery() {
   const fetchPokemonsData = async () => {
     setLoading(true);
     try {
-      const newPokemons = await FetchPokemons(offsetFetch);
+      const newPokemons = await FetchPokemons(
+        offsetFetch,
+        NUMBER_POKEMONS_PER_FETCH
+      );
       const totalPokemon = [...pokemons, ...newPokemons];
       setPokemons([...totalPokemon]);
       setError(false);
