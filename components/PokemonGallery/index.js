@@ -25,9 +25,10 @@ export default function PokemonGallery() {
       const newPokemons = await FetchPokemons(offsetFetch);
       const totalPokemon = [...pokemons, ...newPokemons];
       setPokemons([...totalPokemon]);
+      setError(false);
     } catch (error) {
       console.error(error);
-      setError(error);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -57,7 +58,6 @@ export default function PokemonGallery() {
           })}
         </div>
       )}
-
       {loading && (
         <div className="my-5">
           <Spinner />
