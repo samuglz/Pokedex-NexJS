@@ -1,5 +1,5 @@
 const PREFIX_URL_API = `https://pokeapi.co/api/v2/pokemon?offset=`;
-const SUFIX_URL_API = `&limit=21`;
+const SUFIX_URL_API = `&limit=24`;
 
 const mapPokemons = (pokemonsData, offset) => {
   return pokemonsData.map((pokemon, index) => {
