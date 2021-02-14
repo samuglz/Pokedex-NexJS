@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "../Card";
 import Spinner from "../Spinner";
+import { FetchPokemons } from "../../services/AllPokemonApi";
 
 export default function PokemonGallery() {
   const [pokemons, setPokemons] = useState([]);
@@ -26,17 +27,17 @@ export default function PokemonGallery() {
     });
   };
 
-  const fetchPokemonsData = () => {
-    fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offsetFetch}&limit=21`)
-      .then((res) => res.json())
-      .then((apiResponse) => {
-        const { results: pokemonList } = apiResponse;
-        const newPokemons = mapPokemons(pokemonList);
-        const totalPokemon = [...pokemons, ...newPokemons];
-        setPokemons([...totalPokemon]);
-        setLoading(false);
-      })
-      .catch((err) => console.error(err));
+  const fetchPokemonsData = async () => {
+    try {
+      const apiResponse = await FetchPokemons(offsetFetch);
+      const { results: pokemonList } = apiResponse;
+      const newPokemons = mapPokemons(pokemonList);
+      const totalPokemon = [...pokemons, ...newPokemons];
+      setPokemons([...totalPokemon]);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -54,7 +55,11 @@ export default function PokemonGallery() {
           return <Card key={pokemon.id} pokemon={pokemon} />;
         })}
       </div>
-      {loading && <Spinner />}
+      {loading && (
+        <div className="my-5">
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 }
