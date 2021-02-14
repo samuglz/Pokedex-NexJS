@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Card from "../Card";
-import Spinner from "../Spinner";
-import { FetchPokemons } from "../../services/PokemonApi";
+import Card from "components/Card";
+import Spinner from "components/Spinner";
+import { FetchPokemons } from "services/PokemonApi";
 
 export default function PokemonGallery() {
   const [pokemons, setPokemons] = useState([]);

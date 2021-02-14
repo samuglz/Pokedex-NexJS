@@ -1,7 +1,7 @@
 import Head from "next/head";
 
-import Header from "../components/Header";
-import PokemonGallery from "../components/PokemonGallery";
+import Header from "components/Header";
+import PokemonGallery from "components/PokemonGallery";
 
 export default function Home() {
   return (
