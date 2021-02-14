@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Card from "../Card";
 import Spinner from "../Spinner";
-import { FetchPokemons } from "../../services/AllPokemonApi";
+import { FetchPokemons } from "../../services/PokemonApi";
 
 export default function PokemonGallery() {
   const [pokemons, setPokemons] = useState([]);
   const [offsetFetch, setOffsetFetch] = useState(0);
   const [loading, setLoading] = useState(false);
-
-  const getRealIndexPokedex = (arrayIndex) => {
-    return arrayIndex + offsetFetch + 1;
-  };
 
   const addScrollEvent = () => {
     document.addEventListener("scroll", () => {
@@ -21,17 +17,9 @@ export default function PokemonGallery() {
     });
   };
 
-  const mapPokemons = (pokemonsData) => {
-    return pokemonsData.map((pokemon, index) => {
-      return { id: getRealIndexPokedex(index), name: pokemon.name };
-    });
-  };
-
   const fetchPokemonsData = async () => {
     try {
-      const apiResponse = await FetchPokemons(offsetFetch);
-      const { results: pokemonList } = apiResponse;
-      const newPokemons = mapPokemons(pokemonList);
+      const newPokemons = await FetchPokemons(offsetFetch);
       const totalPokemon = [...pokemons, ...newPokemons];
       setPokemons([...totalPokemon]);
       setLoading(false);
