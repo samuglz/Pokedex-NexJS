@@ -3,7 +3,7 @@ import ResumePokemonCard from "components/ResumePokemonCard";
 
 export default function PokemonResumePage(props) {
   console.log(props);
-  const { id, name, error, msgError } = props;
+  const { error, msgError } = props;
   return (
     <div className="flex justify-center items-center h-screen">
       {!error ? (
@@ -15,16 +15,17 @@ export default function PokemonResumePage(props) {
   );
 }
 
-PokemonResumePage.getInitialProps = (context) => {
-  const { query } = context;
-  const { id } = query;
-  return fetch(`http://localhost:3000/api/pokemon/${id}`).then(
-    (apiResponse) => {
-      if (apiResponse.ok) return apiResponse.json();
-      return {
-        error: true,
-        msgError: "The page you are looking for does not exist",
-      };
-    }
-  );
+export const getServerSideProps = async (context) => {
+  const { params, res } = context;
+  const { id } = params;
+
+  const response = await fetch(`http://localhost:3000/api/pokemon/${id}`);
+
+  if (response.ok) {
+    const props = await response.json();
+    return { props };
+  }
+  if (res) {
+    res.writeHead(301, { location: "/" }).end();
+  }
 };
